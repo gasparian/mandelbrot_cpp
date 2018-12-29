@@ -7,6 +7,7 @@
 using namespace std;
 
 //g++ -std=c++14 mandelbrot.cpp -lglut -lGL -lpthread -o mandelbrot
+//mandelbrot 1000 10
 
 const int width = 800;
 const int height = width * 0.77;
