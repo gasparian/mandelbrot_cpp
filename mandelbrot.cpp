@@ -8,7 +8,7 @@
 using namespace std;
 
 // g++ -std=c++14 mandelbrot.cpp -lglut -lGL -lpthread -o mandelbrot
-// ./mandelbrot 1000 10
+// ./mandelbrot 1000 10 0.5
 
 const int width = 800;
 const int height = width * 0.77;
@@ -41,8 +41,8 @@ void compute_mandelbrot(vector<int> rows) {
             while( abs( z ) < 2.0 && n < ::MAX_ITERATIONS ) {
                 z = ( z * z ) + c;
                 smooth1 += exp(-1.0 * abs( z ));
-                smooth2 = smooth1 / 2.0;
-                smooth3 = smooth1 / 4.0;
+                smooth2 = smooth1 / 4.0;
+                smooth3 = smooth1 / 8.0;
                 ++n;
             }
 
