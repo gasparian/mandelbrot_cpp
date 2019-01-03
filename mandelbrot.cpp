@@ -4,8 +4,10 @@
 #include <complex>
 #include <cmath>
 #include <ctime>
+#include <chrono>
 #include <thread>
 using namespace std;
+using namespace std::chrono;
 
 // g++ -std=c++14 mandelbrot.cpp -lglut -lGL -lpthread -o mandelbrot
 // ./mandelbrot 1000 10 0.5
@@ -18,7 +20,7 @@ int MAX_ITERATIONS = 250;
 int NUM_THREADS = 4;
 int N_CLICKS = 0;
 float SCALE_FACTOR = .6;
-clock_t START;
+auto START = steady_clock::now();
 bool FLAG = false;
 
 // Arguments to specify the region on the complex plane to plot
@@ -114,14 +116,15 @@ void mouseButton(int button, int state, int x, int y) {
             }
 
             if ( ::N_CLICKS == 1 ) {
-                ::START = clock();
+                ::START = steady_clock::now();
             }
             
             if ( ::N_CLICKS == 2 ) {
-                float duration = 1.0 * ( clock() - ::START ) / 1000;
+                auto finish = steady_clock::now();
+                int duration = duration_cast<milliseconds>(finish - ::START).count();
                 ::N_CLICKS = 0;
 
-                if ( (duration  <= 0.6) && (not ::FLAG) ) {
+                if ( (duration <= 300) && (not ::FLAG) ) {
 
                     ::FLAG = true;
 
