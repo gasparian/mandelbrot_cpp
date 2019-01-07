@@ -18,4 +18,4 @@ Then you can specify arguments and run the code:
 ```
 ./mandelbrot 1000 10 0.5
 ```  
-Zoom-in is available by double click.
+Zoom-in is available by double clicking inside the window.
