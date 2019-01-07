@@ -12,19 +12,21 @@ using namespace std::chrono;
 // g++ -std=c++14 mandelbrot.cpp -lglut -lGL -lpthread -o mandelbrot
 // ./mandelbrot 1000 10 0.5
 
+// declare window size and initialize pixels matrix
 const int width = 800;
 const int height = width * 0.77;
 double matrix[width][height][3] = {};
 
-int MAX_ITERATIONS = 250;
-int NUM_THREADS = 4;
-int N_CLICKS = 0;
-float SCALE_FACTOR = .6;
+int MAX_ITERATIONS = 250; // max. number iterations for every pixel
+int NUM_THREADS = 4; // number of chunks for parallel processing
+int N_CLICKS = 0; 
+float SCALE_FACTOR = .6; // scale factor for zoom-in
 auto START = steady_clock::now();
 bool FLAG = false;
+float DIVIDER;
 
 // Arguments to specify the region on the complex plane to plot
-float left = -2.125, right = 0.75, top = 1.125, bottom = -1.125;
+double left = -2.125, right = 0.75, top = 1.125, bottom = -1.125;
 
 void compute_mandelbrot(vector<int> rows) {
 
@@ -37,21 +39,22 @@ void compute_mandelbrot(vector<int> rows) {
             complex<double> z( 0.0, 0.0 );
             
             int n = 0;
-            double smooth1 = exp(-1.0 * abs( z ));
-            double smooth2, smooth3;
+            double smooth1 = 0.0, smooth2 = 0.0, smooth3 = 0.0;
 
             while( abs( z ) < 2.0 && n < ::MAX_ITERATIONS ) {
                 z = ( z * z ) + c;
+                // adjusting color
                 smooth1 += exp(-1.0 * abs( z ));
-                smooth2 = smooth1 / 4.0;
-                smooth3 = smooth1 / 8.0;
                 ++n;
             }
 
+            smooth2 = sin(smooth1)*smooth1;
+            smooth3 = cos(smooth1)*smooth1;
+
             if (n != MAX_ITERATIONS) {
-                 ::matrix[x][y][0] = smooth1 / (sqrt(::MAX_ITERATIONS));
-                 ::matrix[x][y][1] = smooth2 / (sqrt(::MAX_ITERATIONS));
-                 ::matrix[x][y][2] = smooth3 / (sqrt(::MAX_ITERATIONS));
+                 ::matrix[x][y][0] = smooth3 / ::DIVIDER;
+                 ::matrix[x][y][1] = smooth2 / ::DIVIDER;
+                 ::matrix[x][y][2] = smooth1 / ::DIVIDER;
             } else { 
                  ::matrix[x][y][0] = 0.0;
                  ::matrix[x][y][1] = 0.0;
@@ -63,7 +66,7 @@ void compute_mandelbrot(vector<int> rows) {
 
 void draw() {
     thread t[::NUM_THREADS];
-
+    // Split window by height 
     int rc, N = 0, n_rows = ::height / ::NUM_THREADS;
     vector< vector<int>> buckets( ::NUM_THREADS ); 
     for (int y = 0; y < ::height; ++y) {
@@ -72,7 +75,7 @@ void draw() {
              N++;
          }
     }
-
+    // compute mandelbrot set on each chunk
     for( int i = 0; i < ::NUM_THREADS; ++i ) {
         t[i] = thread(compute_mandelbrot, buckets[i]);
     }
@@ -119,42 +122,45 @@ void mouseButton(int button, int state, int x, int y) {
                 ::START = steady_clock::now();
             }
             
-            if ( ::N_CLICKS == 2 ) {
-                auto finish = steady_clock::now();
-                int duration = duration_cast<milliseconds>(finish - ::START).count();
-                ::N_CLICKS = 0;
+            if ( ::N_CLICKS >= 2 ) {
+                if ( ::N_CLICKS == 2 ) { 
+                    auto finish = steady_clock::now();
+                    int duration = duration_cast<milliseconds>(finish - ::START).count();
+                    // recompute mandelbrot set in smaller region around the mouse position
+                    if ( (duration <= 500) && (not ::FLAG) ) {
 
-                if ( (duration <= 300) && (not ::FLAG) ) {
+                        ::FLAG = true;
 
-                    ::FLAG = true;
+                        double dx = ::right - ::left;
+                        double dy = ::top - ::bottom;
 
-                    double dx = ::right - ::left;
-                    double dy = ::top - ::bottom;
+                        double new_center_x = ::left + ( x * dx / ::width );
+                        double new_center_y = ::bottom + ( y * dy / ::height );
 
-                    double new_center_x = ::left + ( x * dx / ::width );
-                    double new_center_y = ::bottom + ( y * dy / ::height );
-
-                    cout << " [DEBUG] New center: " << new_center_x << " " << new_center_y << endl;
+                        cout << " [DEBUG] New center: " << new_center_x << " " << new_center_y << endl;
                    
-                    double new_delta_x = abs( dx * ::SCALE_FACTOR );
-                    double new_delta_y = abs( dy * ::SCALE_FACTOR );
+                        double new_delta_x = abs( dx * ::SCALE_FACTOR );
+                        double new_delta_y = abs( dy * ::SCALE_FACTOR );
 
-                    cout << " [DEBUG] New deltas: " << new_delta_x << " " << new_delta_y << endl;
+                        cout << " [DEBUG] New deltas: " << new_delta_x << " " << new_delta_y << endl;
 
-                    ::left = new_center_x - ( new_delta_x / 2.0 );
-                    ::right = new_center_x + ( new_delta_x / 2.0 );
-                    ::bottom = new_center_y - ( new_delta_y / 2.0 );
-                    ::top = new_center_y + ( new_delta_y / 2.0 ); 
+                        ::left = new_center_x - ( new_delta_x / 2.0 );
+                        ::right = new_center_x + ( new_delta_x / 2.0 );
+                        ::bottom = new_center_y - ( new_delta_y / 2.0 );
+                        ::top = new_center_y + ( new_delta_y / 2.0 ); 
 
-                    cout << " [DEBUG] New borders: " << ::left << " " << ::right << " " << ::bottom << " " << ::top << endl;
+                        cout << " [DEBUG] New borders: " << ::left << " " << ::right << " " << ::bottom << " " << ::top << endl;
 
-                    glutPostRedisplay();
+                        glutPostRedisplay();
+                    }
                 }
+                ::N_CLICKS = 0;
             }
         }       
 }
 
 int main( int argc, char** argv ) {
+    // read the arguments
     if (argc > 1) {
         ::MAX_ITERATIONS = atoi(argv[1]);
     } 
@@ -165,15 +171,15 @@ int main( int argc, char** argv ) {
     if (argc > 3) {
         ::SCALE_FACTOR = atof(argv[3]);
     }
-
  
+    ::DIVIDER = sqrt(::MAX_ITERATIONS);
     glutInit( &argc, argv );
     glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA );
     glutInitWindowSize( ::width, ::height );
     glutCreateWindow( "Mandelbrot" );
     glutDisplayFunc( display );
 
-    //Zoom by mouse-click
+    // make zoom-in by mouse-click
     glutMouseFunc(mouseButton);
 
     glutMainLoop();
