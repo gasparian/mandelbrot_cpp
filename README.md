@@ -1,9 +1,16 @@
 # mandelbrot_cpp
-Multi-thread fractals rendering with C++ &amp; OpenGL  
+Multi-thread mandelbrot set rendering with C++ &amp; OpenGL  
 
 <img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/animation.gif" height=500>  
 
 Parallel rendering is done by independently processing the chunks of window area.
+
+### Requirements
+Install OpenGL libraries and freeGlut:
+```
+sudo apt-get install mesa-utils
+sudo apt-get install freeglut3-dev
+```
 
 ### Usage
 Compile `mandelbrot.cpp`:
@@ -18,4 +25,5 @@ Then you can specify arguments and run the code:
 ```
 ./mandelbrot 1000 10 0.5
 ```  
+
 Zoom-in is available by double clicking inside the window.
