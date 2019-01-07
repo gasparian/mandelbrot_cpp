@@ -1,7 +1,7 @@
 # mandelbrot_cpp
 Multi-thread fractals rendering with C++ &amp; OpenGL  
 
-<img src="https://github.com/gasparian/fractals_cpp/blob/master/pics/mandelbrot_animation.gif" height=500>  
+<img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/animation.gif" height=500>  
 
 Parallel rendering is done by independently processing the chunks of window area.
 
