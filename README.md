@@ -10,6 +10,10 @@ Parallel rendering is done by independently processing chunks of window area.
 
 <img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/animation.gif" height=500>  
 
+In this implementation, you can zoom-in by double clicking inside the window. And zoom is actually not infinite, due to the limitation of floating point calculations precision. So if you zoom in up to 10e+13 you'll see very discrete picture, something like this:  
+
+<img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/animation.gif" height=500>  
+
 ### Requirements
 Install OpenGL libraries and freeGlut:
 ```
@@ -30,5 +34,4 @@ Then you can specify arguments and run the code:
 ```
 ./mandelbrot 1000 10 0.5
 ```  
-
-Zoom-in is available by double clicking inside the window.
+If you need to change the window size, replace variable `width` inside the code with whatever you want.
