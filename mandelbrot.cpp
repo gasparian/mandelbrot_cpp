@@ -26,7 +26,7 @@ bool FLAG = false;
 float DIVIDER;
 
 // Arguments to specify the region on the complex plane to plot
-double left = -2.125, right = 0.75, top = 1.125, bottom = -1.125;
+long double left = -2.125, right = 0.75, top = 1.125, bottom = -1.125;
 
 void compute_mandelbrot(vector<int> rows) {
 
@@ -131,16 +131,16 @@ void mouseButton(int button, int state, int x, int y) {
 
                         ::FLAG = true;
 
-                        double dx = ::right - ::left;
-                        double dy = ::top - ::bottom;
+                        long double dx = ::right - ::left;
+                        long double dy = ::top - ::bottom;
 
-                        double new_center_x = ::left + ( x * dx / ::width );
-                        double new_center_y = ::bottom + ( y * dy / ::height );
+                        long double new_center_x = ::left + ( x * dx / ::width );
+                        long double new_center_y = ::bottom + ( y * dy / ::height );
 
                         cout << " [DEBUG] New center: " << new_center_x << " " << new_center_y << endl;
                    
-                        double new_delta_x = abs( dx * ::SCALE_FACTOR );
-                        double new_delta_y = abs( dy * ::SCALE_FACTOR );
+                        long double new_delta_x = abs( dx * ::SCALE_FACTOR );
+                        long double new_delta_y = abs( dy * ::SCALE_FACTOR );
 
                         cout << " [DEBUG] New deltas: " << new_delta_x << " " << new_delta_y << endl;
 
