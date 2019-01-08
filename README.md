@@ -6,10 +6,9 @@ For every pixel in the wanted region we calculate mapping to the coordinates on 
 <img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/complex_plane.png" height=250>  
 
 Coloring scheme is a huge field for improvisation. Generally speaking, the intensity is determined by how fast *z* goes to infinity (relative to the maximum iterations).  
+Parallel rendering is done by independently processing chunks of window area.  
 
 <img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/animation.gif" height=500>  
-
-Parallel rendering is done by independently processing chunks of window area.
 
 ### Requirements
 Install OpenGL libraries and freeGlut:
