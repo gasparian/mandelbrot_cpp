@@ -1,5 +1,4 @@
-# mandelbrot_cpp
-Multi-thread mandelbrot set rendering with C++ &amp; OpenGL  
+# Multi-thread mandelbrot set rendering with C++ &amp; OpenGL  
 
 To create mandelbrot set we must simply iterate: *z -> z * z + c*, where *z* and *c* are complex numbers. 
 For every pixel in the wanted region we calculate mapping to the coordinates on the complex plane and then assign this point to *c*. For every *c* we start iterating from *z = 0*. Iteration stops when |*z*| or number of iterations reaches the boundaries.  
