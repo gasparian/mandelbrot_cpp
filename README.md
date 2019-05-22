@@ -12,7 +12,7 @@ Parallel rendering is done by independently processing chunks of window area.
 
 In this implementation, you can zoom-in by double clicking inside the window. And zoom is actually not infinite, due to the limitation of floating point calculations precision. So if you zoom in up to 10e+13 you'll see very discrete picture, something like this:  
 
-<img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/animation.gif" height=500>  
+<img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/mandelbrot_artefacts.png" height=500>  
 
 ### Requirements
 Install OpenGL libraries and freeGlut:
