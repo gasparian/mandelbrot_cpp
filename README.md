@@ -24,7 +24,7 @@ sudo apt-get install freeglut3-dev
 ### Usage
 Compile `mandelbrot.cpp`:
 ```
-g++ -std=c++11 mandelbrot.cpp -lglut -lGL -lpthread -o mandelbrot
+g++ -O2 -fno-stack-limit -x c++ mandelbrot.cpp -lglut -lGL -lpthread -o mandelbrot
 ```
 
 Then you can specify arguments and run the code:
