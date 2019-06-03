@@ -6,11 +6,11 @@ For every pixel in the wanted region we calculate mapping to the coordinates on 
 <img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/complex_plane.png" height=250>  
 
 Coloring scheme is a huge field for improvisation. Generally speaking, the intensity is determined by how fast *z* goes to infinity (relative to the maximum iterations).  
-Parallel rendering is done by independently processing chunks of window area.  
+Parallel rendering is done by independently processing chunks of window area (I should say, that it's implemented "dirty" - through the global variables).  
 
 <img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/animation.gif" height=500>  
 
-In this implementation, you can zoom-in by double clicking inside the window. And zoom is actually not infinite, due to the limitation of floating point calculations precision. So if you zoom in up to 10e+13 you'll see very discrete picture, something like this:  
+In this implementation, you can zoom-in by double clicking inside the window. And zoom is actually not infinite, due to the limitation of floating point calculations precision. So if you zoom in up to 10e+13 you'll see very discrete image, something like this:  
 
 <img src="https://github.com/gasparian/mandelbrot_cpp/blob/master/pics/mandelbrot_artefacts.png" height=500>  
 
